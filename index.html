@@ -1,394 +1,923 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../style/index.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link rel="icon" type="image/x-icon" href="../assets/va.png">
-    <title>Moll One-Telas y confeccion de Mochilas</title>
-    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CARLO — Material de Laboratorio</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0a1628;
+    --blue: #1a3a6b;
+    --accent: #2e7df7;
+    --sky: #e8f0fe;
+    --white: #ffffff;
+    --gray: #6b7280;
+    --light: #f4f7fc;
+    --border: #dce3ef;
+    --green: #10b981;
+    --red: #ef4444;
+    --gold: #f59e0b;
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:'DM Sans',sans-serif; background:var(--light); color:var(--navy); }
+
+  /* ─── HEADER ─── */
+  header {
+    background:var(--navy);
+    padding:0 2rem;
+    display:flex; align-items:center; justify-content:space-between;
+    height:70px; position:sticky; top:0; z-index:100;
+    box-shadow:0 2px 20px rgba(0,0,0,.3);
+  }
+  .logo { display:flex; align-items:center; gap:.75rem; text-decoration:none; }
+  .logo-icon {
+    width:38px; height:38px; background:var(--accent);
+    border-radius:8px; display:flex; align-items:center; justify-content:center;
+    font-size:1.1rem; font-weight:700; color:#fff; font-family:'DM Serif Display',serif;
+  }
+  .logo-text { color:#fff; font-family:'DM Serif Display',serif; font-size:1.4rem; letter-spacing:.05em; }
+  .logo-sub { color:#8ba8d4; font-size:.65rem; text-transform:uppercase; letter-spacing:.12em; margin-top:-4px; display:block; }
+
+  nav { display:flex; gap:.5rem; }
+  nav a {
+    color:#8ba8d4; text-decoration:none; padding:.4rem .9rem;
+    border-radius:6px; font-size:.85rem; font-weight:500; transition:.2s;
+  }
+  nav a:hover { color:#fff; background:rgba(255,255,255,.08); }
+
+  .header-right { display:flex; align-items:center; gap:1rem; }
+  .contact-btn {
+    color:#8ba8d4; font-size:.8rem; display:flex; align-items:center; gap:.4rem;
+    padding:.4rem .8rem; border:1px solid rgba(138,168,212,.3); border-radius:6px;
+    text-decoration:none; transition:.2s;
+  }
+  .contact-btn:hover { color:#fff; border-color:rgba(255,255,255,.3); }
+
+  .cart-btn {
+    position:relative; background:var(--accent); color:#fff;
+    border:none; border-radius:8px; padding:.45rem 1rem;
+    cursor:pointer; font-size:.85rem; font-weight:600;
+    display:flex; align-items:center; gap:.5rem; transition:.2s;
+    font-family:'DM Sans',sans-serif;
+  }
+  .cart-btn:hover { background:#1a6de8; }
+  .cart-count {
+    background:#ef4444; color:#fff; border-radius:50%;
+    width:18px; height:18px; font-size:.65rem; font-weight:700;
+    display:flex; align-items:center; justify-content:center;
+    position:absolute; top:-6px; right:-6px;
+  }
+  
+  
+  /* ─── HERO ─── */
+  .hero {
+    background: linear-gradient(135deg, var(--navy) 0%, #0d2148 60%, #1a3a6b 100%);
+    padding:4rem 2rem; text-align:center; position:relative; overflow:hidden;
+  }
+  .hero::before {
+    content:''; position:absolute; inset:0;
+    background: radial-gradient(ellipse at 70% 50%, rgba(46,125,247,.15) 0%, transparent 60%);
+  }
+  .hero-tag {
+    display:inline-block; background:rgba(46,125,247,.15); color:#2e7df7;
+    border:1px solid rgba(46,125,247,.3); border-radius:20px;
+    padding:.3rem 1rem; font-size:.75rem; font-weight:600;
+    text-transform:uppercase; letter-spacing:.1em; margin-bottom:1.2rem;
+  }
+  .hero h1 {
+    font-family:'DM Serif Display',serif; font-size:clamp(2rem,5vw,3.2rem);
+    color:#fff; line-height:1.15; margin-bottom:1rem;
+  }
+  .hero h1 em { color:#2e7df7; font-style:italic; }
+  .hero p { color:#8ba8d4; font-size:1rem; max-width:520px; margin:0 auto 2rem; line-height:1.7; }
+  .hero-btns { display:flex; gap:1rem; justify-content:center; flex-wrap:wrap; }
+  .btn-primary {
+    background:var(--accent); color:#fff; padding:.7rem 1.8rem;
+    border-radius:8px; font-weight:600; text-decoration:none;
+    font-size:.9rem; transition:.2s; border:none; cursor:pointer;
+    font-family:'DM Sans',sans-serif;
+  }
+  .btn-primary:hover { background:#1a6de8; }
+  .btn-outline {
+    background:transparent; color:#8ba8d4; padding:.7rem 1.8rem;
+    border-radius:8px; font-weight:500; text-decoration:none;
+    font-size:.9rem; border:1px solid rgba(138,168,212,.3); cursor:pointer;
+    font-family:'DM Sans',sans-serif; transition:.2s;
+  }
+  .btn-outline:hover { color:#fff; border-color:rgba(255,255,255,.4); }
+
+  /* ─── PRODUCTS ─── */
+  .products-section { padding:3rem 2rem; max-width:1200px; margin:0 auto; }
+  .section-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:2rem; }
+  .section-title { font-family:'DM Serif Display',serif; font-size:1.8rem; color:var(--navy); }
+  .search-bar {
+    display:flex; gap:.5rem; align-items:center;
+    background:#fff; border:1px solid var(--border);
+    border-radius:8px; padding:.4rem .8rem; width:280px;
+  }
+  .search-bar input {
+    border:none; outline:none; font-size:.85rem; width:100%;
+    font-family:'DM Sans',sans-serif; color:var(--navy);
+  }
+  .search-icon { color:var(--gray); font-size:1rem; }
+
+  .products-grid {
+    display:grid; grid-template-columns:repeat(auto-fill,minmax(240px,1fr)); gap:1.5rem;
+  }
+  .product-card {
+    background:#fff; border-radius:12px; overflow:hidden;
+    border:1px solid var(--border); transition:.25s; cursor:pointer;
+  }
+  .product-card:hover { transform:translateY(-3px); box-shadow:0 12px 32px rgba(10,22,40,.1); }
+  .product-img {
+    width:100%; height:180px; object-fit:cover;
+    background:linear-gradient(135deg,#e8f0fe,#dce3ef);
+    display:flex; align-items:center; justify-content:center;
+    font-size:3rem; color:var(--accent);
+  }
+  .product-img img { width:100%; height:100%; object-fit:cover; }
+  .product-info { padding:1rem; }
+  .product-name { font-weight:600; font-size:.95rem; margin-bottom:.3rem; color:var(--navy); }
+  .product-desc { font-size:.78rem; color:var(--gray); line-height:1.5; margin-bottom:.8rem; }
+  .product-footer { display:flex; align-items:center; justify-content:space-between; }
+  .product-price { font-weight:700; font-size:1.1rem; color:var(--accent); }
+  .add-cart-btn {
+    background:var(--navy); color:#fff; border:none; border-radius:6px;
+    padding:.38rem .9rem; font-size:.78rem; font-weight:600; cursor:pointer;
+    transition:.2s; font-family:'DM Sans',sans-serif;
+  }
+  .add-cart-btn:hover { background:var(--accent); }
+  .stock-badge {
+    display:inline-block; font-size:.65rem; font-weight:600;
+    padding:.2rem .5rem; border-radius:4px; margin-bottom:.5rem;
+  }
+  .in-stock { background:#d1fae5; color:#065f46; }
+  .out-stock { background:#fee2e2; color:#991b1b; }
+
+  /* ─── CART SIDEBAR ─── */
+  .cart-overlay {
+    display:none; position:fixed; inset:0; background:rgba(0,0,0,.5); z-index:200;
+  }
+  .cart-overlay.open { display:block; }
+  .cart-panel {
+    position:fixed; right:0; top:0; bottom:0; width:380px; max-width:95vw;
+    background:#fff; z-index:201; display:flex; flex-direction:column;
+    transform:translateX(100%); transition:.3s ease;
+    box-shadow:-8px 0 40px rgba(0,0,0,.15);
+  }
+  .cart-panel.open { transform:translateX(0); }
+  .cart-header {
+    background:var(--navy); color:#fff; padding:1.2rem 1.5rem;
+    display:flex; align-items:center; justify-content:space-between;
+  }
+  .cart-header h3 { font-family:'DM Serif Display',serif; font-size:1.2rem; }
+  .close-btn {
+    background:none; border:none; color:#8ba8d4; font-size:1.4rem;
+    cursor:pointer; line-height:1;
+  }
+  .cart-items { flex:1; overflow-y:auto; padding:1rem; }
+  .cart-empty { text-align:center; color:var(--gray); padding:3rem 1rem; font-size:.9rem; }
+  .cart-item {
+    display:flex; gap:.8rem; align-items:center; padding:.8rem 0;
+    border-bottom:1px solid var(--border);
+  }
+  .cart-item-img {
+    width:52px; height:52px; border-radius:8px; object-fit:cover;
+    background:var(--sky); flex-shrink:0; display:flex; align-items:center;
+    justify-content:center; font-size:1.5rem; overflow:hidden;
+  }
+  .cart-item-img img { width:100%; height:100%; object-fit:cover; }
+  .cart-item-info { flex:1; }
+  .cart-item-name { font-size:.85rem; font-weight:600; }
+  .cart-item-price { font-size:.8rem; color:var(--accent); font-weight:600; }
+  .cart-qty { display:flex; align-items:center; gap:.4rem; margin-top:.3rem; }
+  .qty-btn {
+    width:22px; height:22px; border-radius:4px; border:1px solid var(--border);
+    background:#fff; cursor:pointer; font-size:.85rem; display:flex;
+    align-items:center; justify-content:center; color:var(--navy);
+  }
+  .qty-num { font-size:.82rem; font-weight:600; min-width:20px; text-align:center; }
+  .remove-item { background:none; border:none; color:#ef4444; cursor:pointer; font-size:1rem; }
+  .cart-footer { padding:1rem 1.5rem; border-top:2px solid var(--border); background:var(--light); }
+  .cart-total { display:flex; justify-content:space-between; font-weight:700; font-size:1.1rem; margin-bottom:1rem; }
+  .checkout-btn {
+    width:100%; background:var(--accent); color:#fff; border:none; border-radius:8px;
+    padding:.8rem; font-size:.95rem; font-weight:700; cursor:pointer;
+    font-family:'DM Sans',sans-serif; transition:.2s;
+  }
+  .checkout-btn:hover { background:#1a6de8; }
+
+  /* ─── CONTACT SECTION ─── */
+  .contact-section {
+    background:var(--navy); color:#fff; padding:3rem 2rem; margin-top:2rem;
+  }
+  .contact-inner { max-width:900px; margin:0 auto; display:grid; grid-template-columns:1fr 1fr; gap:3rem; }
+  .contact-info h2 { font-family:'DM Serif Display',serif; font-size:1.8rem; margin-bottom:1rem; }
+  .contact-info p { color:#8ba8d4; line-height:1.7; margin-bottom:1.5rem; font-size:.9rem; }
+  .contact-detail { display:flex; gap:.8rem; margin-bottom:.8rem; align-items:flex-start; }
+  .contact-icon { font-size:1.1rem; margin-top:.1rem; }
+  .contact-text { font-size:.85rem; }
+  .contact-text strong { display:block; color:#fff; margin-bottom:.1rem; }
+  .contact-text span { color:#8ba8d4; }
+  .contact-form { display:flex; flex-direction:column; gap:1rem; }
+  .form-input {
+    background:rgba(255,255,255,.07); border:1px solid rgba(255,255,255,.1);
+    border-radius:8px; padding:.7rem 1rem; color:#fff; font-size:.88rem;
+    font-family:'DM Sans',sans-serif; outline:none; transition:.2s;
+  }
+  .form-input::placeholder { color:#8ba8d4; }
+  .form-input:focus { border-color:var(--accent); background:rgba(46,125,247,.08); }
+  .form-textarea { resize:vertical; min-height:100px; }
+
+  /* ─── ADMIN MODAL ─── */
+  .modal-overlay {
+    display:none; position:fixed; inset:0; background:rgba(0,0,0,.6);
+    z-index:300; align-items:center; justify-content:center; padding:1rem;
+  }
+  .modal-overlay.open { display:flex; }
+  .modal {
+    background:#fff; border-radius:14px; width:100%; max-width:900px;
+    max-height:90vh; overflow:hidden; display:flex; flex-direction:column;
+    box-shadow:0 24px 80px rgba(0,0,0,.3);
+  }
+  .modal-header {
+    background:var(--navy); color:#fff; padding:1.2rem 1.5rem;
+    display:flex; align-items:center; justify-content:space-between;
+    flex-shrink:0;
+  }
+  .modal-header h2 { font-family:'DM Serif Display',serif; font-size:1.2rem; }
+  .modal-tabs { display:flex; gap:.3rem; }
+  .modal-tab {
+    background:rgba(255,255,255,.1); color:#8ba8d4; border:none; border-radius:6px;
+    padding:.35rem .8rem; cursor:pointer; font-size:.78rem; font-weight:600;
+    font-family:'DM Sans',sans-serif; transition:.2s;
+  }
+  .modal-tab.active { background:var(--accent); color:#fff; }
+  .modal-body { flex:1; overflow-y:auto; padding:1.5rem; }
+
+  /* Admin tabs */
+  .tab-content { display:none; }
+  .tab-content.active { display:block; }
+
+  /* Products table */
+  .admin-table { width:100%; border-collapse:collapse; font-size:.82rem; }
+  .admin-table th {
+    background:var(--light); padding:.7rem 1rem; text-align:left;
+    font-weight:600; color:var(--navy); border-bottom:2px solid var(--border);
+    font-size:.75rem; text-transform:uppercase; letter-spacing:.05em;
+  }
+  .admin-table td { padding:.65rem 1rem; border-bottom:1px solid var(--border); }
+  .admin-table tr:hover td { background:#f9fafc; }
+  .admin-table img { width:40px; height:40px; object-fit:cover; border-radius:6px; }
+  .admin-table .no-img {
+    width:40px; height:40px; background:var(--sky); border-radius:6px;
+    display:flex; align-items:center; justify-content:center; font-size:1.2rem;
+  }
+  .edit-btn {
+    background:var(--sky); color:var(--accent); border:none; border-radius:5px;
+    padding:.3rem .7rem; cursor:pointer; font-size:.75rem; font-weight:600;
+    font-family:'DM Sans',sans-serif; margin-right:.3rem;
+  }
+  .del-btn {
+    background:#fee2e2; color:#dc2626; border:none; border-radius:5px;
+    padding:.3rem .7rem; cursor:pointer; font-size:.75rem; font-weight:600;
+    font-family:'DM Sans',sans-serif;
+  }
+
+  /* Add/Edit form */
+  .admin-form { display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
+  .admin-form .full { grid-column:1/-1; }
+  .field label { display:block; font-size:.78rem; font-weight:600; color:var(--navy); margin-bottom:.4rem; }
+  .field input, .field textarea, .field select {
+    width:100%; border:1px solid var(--border); border-radius:7px; padding:.55rem .8rem;
+    font-size:.85rem; font-family:'DM Sans',sans-serif; color:var(--navy); outline:none; transition:.2s;
+  }
+  .field input:focus, .field textarea:focus { border-color:var(--accent); }
+  .field textarea { resize:vertical; min-height:80px; }
+  .save-btn {
+    background:var(--accent); color:#fff; border:none; border-radius:8px;
+    padding:.65rem 1.6rem; font-size:.88rem; font-weight:700; cursor:pointer;
+    font-family:'DM Sans',sans-serif; transition:.2s; margin-top:.5rem;
+  }
+  .save-btn:hover { background:#1a6de8; }
+  .cancel-btn {
+    background:#f3f4f6; color:var(--gray); border:none; border-radius:8px;
+    padding:.65rem 1.2rem; font-size:.88rem; font-weight:600; cursor:pointer;
+    font-family:'DM Sans',sans-serif; margin-left:.5rem; margin-top:.5rem;
+  }
+
+  /* Sales view */
+  .sales-stats {
+    display:grid; grid-template-columns:repeat(3,1fr); gap:1rem; margin-bottom:1.5rem;
+  }
+  .stat-card {
+    background:var(--light); border:1px solid var(--border); border-radius:10px; padding:1rem;
+  }
+  .stat-value { font-size:1.6rem; font-weight:700; color:var(--navy); font-family:'DM Serif Display',serif; }
+  .stat-label { font-size:.75rem; color:var(--gray); margin-top:.2rem; }
+  .sales-table { font-size:.82rem; }
+  .sale-row { display:grid; grid-template-columns:auto 1fr auto auto; gap:1rem; padding:.6rem .5rem; border-bottom:1px solid var(--border); align-items:center; }
+  .sale-date { color:var(--gray); font-size:.75rem; }
+  .sale-items { font-weight:500; }
+  .sale-total { font-weight:700; color:var(--accent); }
+  .sale-status { background:#d1fae5; color:#065f46; font-size:.7rem; font-weight:600; padding:.2rem .5rem; border-radius:4px; }
+
+  /* Login form */
+  .login-form { max-width:320px; margin:0 auto; padding:1rem; }
+  .login-form h3 { font-family:'DM Serif Display',serif; font-size:1.3rem; margin-bottom:1.2rem; text-align:center; }
+
+  /* Toast */
+  .toast {
+    position:fixed; bottom:1.5rem; right:1.5rem; z-index:500;
+    background:var(--navy); color:#fff; padding:.8rem 1.2rem;
+    border-radius:10px; font-size:.85rem; font-weight:500;
+    box-shadow:0 8px 24px rgba(0,0,0,.2); transform:translateY(120%);
+    transition:.3s; display:flex; align-items:center; gap:.6rem;
+  }
+  .toast.show { transform:translateY(0); }
+  .toast.success { border-left:4px solid var(--green); }
+  .toast.error { border-left:4px solid var(--red); }
+
+  /* Footer */
+  footer {
+    background:#060e1f; color:#8ba8d4; text-align:center;
+    padding:1.5rem; font-size:.78rem;
+  }
+  footer span { color:var(--accent); }
+
+  @media(max-width:700px){
+    nav { display:none; }
+    .contact-inner { grid-template-columns:1fr; }
+    .admin-form { grid-template-columns:1fr; }
+    .admin-form .full { grid-column:1; }
+    .sales-stats { grid-template-columns:1fr 1fr; }
+    .cart-panel { width:100%; }
+  }
+</style>
 </head>
 <body>
-    <header>
-        <div class="header-content">
-            <div  class="logo"> 
-                <img src="../assets/va.png" alt="logo" class="logo-image">
-                <div class="logo-text">
-                    <span class="logos-text">Moll One</span>
-                    <span class="sub-text">Telas y Confeccion de Mochilas</span>
 
-                </div>
-            
-            </div>
-                          
-            <div class="nav-wrapper">
-                <nav class="nav-menu" id="navMenu">
-                    <a href="#home" class="nav-link">🏠 Inicio</a>
-                    <a href="#bestsellers-section" class="nav-link">⭐ Más Vendidos</a>
-                    <a href="#tubes-section" class="nav-link">🧪 Tubos y Matraces</a>
-                    <a href="#measurement-section" class="nav-link">📏 Medición</a>
-                    <a href="#accessories-section" class="nav-link">🔧 Accesorios</a>
-                    <a href="https://wa.me/59178949069?text=Hola,%20deseo%20realizar%20una%20consulta" 
-                    class="nav-link" 
-                    target="_blank">
-                    📞 Contacto
-                    </a>        
-                  </nav>
-            </div>
-
-            <div class="header-actions">
-                <button class="menu-toggle" onclick="toggleMenu()">☰</button>
-                <button class="cart-btn" onclick="openCart()">
-                    🛒 Carrito
-                    <span class="cart-count" id="cartCount">0</span>
-                </button>
-            </div>
-        </div>
-    </header>
-
-    <div class="hero" id="home">
-        <h1>Especialistas en proveer equipos y material de Laboratorio,Fisica y Biologia</h1>
-        <p>Entendemos la precisión que tu trabajo requiere, ofrecemos productos para:
-          
-        </p>
-       <div class="img-prot">
-    <div class="card-producto">
-        <div class="card-image-container">
-            <img src="../assets/cuer.jpg" alt="Torso Humano" class="img-zoom">
-        </div>
-        <div class="card-info">
-            <h3>Torso Humano Anatómico</h3>
-            <p>Modelo detallado para estudio médico y educativo.</p>
-            <span class="precio">$150.00</span>
-            <button class="add-btn" onclick="addToCart(21, 'pro')">Agregar al Carrito</button>
-        </div>
+<!-- HEADER -->
+<header>
+  <a href="#" class="logo">
+    <div class="logo-icon">C</div>
+    <div>
+      <span class="logo-text">CARLO</span>
+      <span class="logo-sub">Material de Laboratorio</span>
     </div>
+  </a>
+  <nav>
+    <a href="#catalogo">Catálogo</a>
+    <a href="#nosotros">Nosotros</a>
+  </nav>
+  <div class="header-right">
+    <a href="#contacto" class="contact-btn">📞 Contacto</a>
+    <button class="cart-btn" onclick="toggleCart()">
+      🛒 Carrito
+      <span class="cart-count" id="cartCount">0</span>
+    </button>
     
-    <div class="card-producto">
-        <div class="card-image-container">
-            <img src="../assets/esq.jpg" alt="Esqueleto" class="img-zoom">
-        </div>
-        <div class="card-info">
-            <h3>Esqueleto Completo</h3>
-            <p>Estructura ósea a escala real con articulaciones.</p>
-            <span class="precio">$350</span>
-            <button class="add-btn" onclick="addToCart(22, 'pro')">Agregar al Carrito</button>
-        </div>
-    </div>
+  </div>
+</header>
 
-    <div class="card-producto">
-        <div class="card-image-container">
-            <img src="../assets/q.jpg" alt="Quit RPC" class="img-zoom">
-        </div>
-        <div class="card-info">
-            <h3>Quit RPC</h3>
-            <p>Quit completo RCP</p>
-            <span class="precio">$180.00</span>
-            <button class="add-btn" onclick="addToCart(23, 'pro')">Agregar al Carrito</button>
-        </div>
-    </div>
-</div>
-    </div>
-</div>
-    </div>
-
-    <div class="section" id="bestsellers-section">
-        <div class="section-header">
-            <h2 class="section-title">⭐ Más Vendidos</h2>
-            <div class="scroll-controls">
-                <button class="scroll-arrow" onclick="scrollSection('bestsellers', 'left')">◀</button>
-                <button class="scroll-arrow" onclick="scrollSection('bestsellers', 'right')">▶</button>
-            </div>
-        </div>
-        <div class="scroll-wrapper">
-            <div class="scroll-container" id="bestsellers"></div>
-        </div>
-    </div>
-
-    <div class="section" id="tubes-section">
-        <div class="section-header">
-            <h2 class="section-title">🧪Materiales de vidrio</h2>
-            <div class="scroll-controls">
-                <button class="scroll-arrow" onclick="scrollSection('tubesFlasks', 'left')">◀</button>
-                <button class="scroll-arrow" onclick="scrollSection('tubesFlasks', 'right')">▶</button>
-            </div>
-        </div>
-        <div class="scroll-wrapper">
-            <div class="scroll-container" id="tubesFlasks"></div>
-        </div>
-    </div>
-
-    <div class="section" id="measurement-section">
-        <div class="section-header">
-            <h2 class="section-title">📏 Medición y Dosificación</h2>
-            <div class="scroll-controls">
-                <button class="scroll-arrow" onclick="scrollSection('measurement', 'left')">◀</button>
-                <button class="scroll-arrow" onclick="scrollSection('measurement', 'right')">▶</button>
-            </div>
-        </div>
-        <div class="scroll-wrapper">
-            <div class="scroll-container" id="measurement"></div>
-        </div>
-    </div>
-
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-tag">Equipamiento Científico Profesional</div>
+  <h1>Todo para tu <em>laboratorio</em>,<br>en un solo lugar.</h1>
+  <p>Microscopios, reactivos, cristalería y más. Proveedor confiable para instituciones educativas, clínicas y laboratorios industriales.</p>
+  <div class="hero-btns">
     
-   
-    <div class="modal" id="cartModal">
-        <div class="modal-content">
-            <h2>🛒 Tu Carrito</h2>
-            <div id="cartItems"></div>
-            <div class="total" id="totalPrice">Total: $0.00</div>
-            <button class="whatsapp-btn" onclick="sendToWhatsApp()">
-                📱 Confirmar Pedido por WhatsApp
-            </button>
-            <button class="close-modal" onclick="closeCart()">Cerrar</button>
-        </div>
+    <a href="#contacto" class="btn-outline">Solicitar Cotización</a>
+  </div>
+</section>
+
+<!-- PRODUCTS -->
+<section class="products-section" id="catalogo">
+  <div class="section-header">
+    <h2 class="section-title">Nuestros Productos</h2>
+    <div class="search-bar">
+      <span class="search-icon">🔍</span>
+      <input type="text" placeholder="Buscar producto..." id="searchInput" oninput="filterProducts()">
     </div>
+  </div>
+  <div class="products-grid" id="productsGrid"></div>
+</section>
 
-    <script>
-        const products = {
-            pro:[
-                { id: 21, name: 'Torso Humano Anatómico', description: 'Modelo detallado para estudio médico y educativo.', price: 10.00, icon: '👩‍🔬' },
-                { id: 22, name: 'Esqueleto Completo', description: 'Estructura ósea a escala real con articulaciones.', price: 120.00, icon: '☠️' },
-                { id: 23, name: 'Quit completo', description: 'Quit completo RCP', price: 180.00, icon: '📦' },
-            ],
-            bestsellers: [
-                { id: 1, image: '../assets/vasop.png', name: 'Vaso precipitado 50ml', description: 'Resistentes al calor', price: 16, icon: '🧪', bestseller: true },
-                {id:2,image:'assets/vasop.png',name:'Vaso Precipitado 100ml',description:'Resistentes al calor',price:23,icon:'🧪',bestseller:true} ,
-                {id:3,image:'assets/vasop.png',name:'Vaso Precipitado 500ml',description:'Resistentes al calor',price:35,icon:'🧪',bestseller:true} ,
-                {id:4,image:'assets/vasop.png',name:'Vaso Precipitado 1000ml',description:'Resistentes al calor',price:68,icon:'🧪',bestseller:true} ,
-                { id: 5, image: '../assets/matra.png', name: 'Matraz Erlenmeyer 100ml', description: 'Ideales para mezclas y cultivos', price: 37, icon: '⚗️', bestseller: true },
-                { id: 6, image: '../assets/matra.png', name: 'Matraz Erlenmeyer 150ml', description: 'Ideales para mezclas y cultivos', price: 40, icon: '⚗️', bestseller: true },
-                { id: 7, image: '../assets/matra.png', name: 'Matraz Erlenmeyer 250ml', description: 'Ideales para mezclas y cultivos', price: 48, icon: '⚗️', bestseller: true },
-                { id: 8, image: '../assets/matra.png', name: 'Matraz Erlenmeyer 500ml', description: 'Ideales para mezclas y cultivos', price: 75, icon: '⚗️', bestseller: true },
-                { id: 9, image: '../assets/vasop.png', name: 'Vaso Precipitado', description: '5 tamaños diferentes (50-1000ml)', price: 16, icon: '🥛', bestseller: true },
-             ],
-            tubesFlasks: [
-                { id: 5, image: '../assets/TUVO.jpg', name: 'Tubos de Ensayo 15ml', description: 'Con tapón de rosca (Pack 25)', price: 45.00, icon: '🧪' },
-                { id: 6, image: '../assets/matra.png', name: 'Matraz Aforados 100ml', description: 'Medición exacta de volúmenes', price: 135.00, icon: '⚗️' },
-                { id: 7, image: '../assets/matra.png', name: 'Matraz Erlenmeyer 500ml', description: 'Para cultivos y reacciones', price: 145.00, icon: '⚗️' },
-                { id: 8, image: '../assets/MATRAZ AFORADO.jpg', name: 'Matraz Aforado 250ml', description: 'Alta precisión volumétrica', price: 155.00, icon: '⚗️' },
-                { id: 9, image: '../assets/TUCEN.png', name: 'Tubo Centrifuga 50ml', description: 'Graduados (Pack 50)', price: 110.00, icon: '🧪' }
-            ],
-            measurement: [
-                { id: 10,image:'assets/soporte.png', name: 'soporte universal', description: 'material de calidad', price: 110, icon: '📏' },
-                { id: 11,image:'assets/2b.jpg', name: 'pinza para dos buretas', description: 'material de calidad', price: 75, icon: '💧' },
-                { id: 12,image:'assets/esp.png', name: 'espatula', description: 'Clase A ', price: 6, icon: '💉' },
-                { id: 13,image:'assets/pi.png', name: 'piseta 250ml', description: '250ml', price: 13, icon: '📏' },
-                { id: 14,image:'assets/pera.png', name: 'pera de goma', description: 'pera de goma', price: 35.00, icon: '💉' },
-                {id: 24,image:'assets/crisol.png', name: 'crisol de porcelana', description: 'Clase A', price: 25.00, icon: '💧' },
-                {id: 25,image:'assets/cap.png', name: 'capsula de porcelana', description: 'Clase A', price: 18.00, icon: '📏' },
-                {id: 26, image:'assets/mortero.png', name: 'mortero', description: 'mortero', price: 35.00, icon: '💉'     },
-                {id : 27, image:'assets/varilla.png', name: 'varilas de vidrio', description: 'varillas de vidrio', price: 6.00, icon: '💧'     },
-                {id : 28, image:'assets/pro.png', name: 'probeta graduada', description: '1000ml', price: 90.00, icon: '📏'},
-                {id : 29, image:'assets/pro.png', name: 'probeta graduada', description: '500ml', price: 75.00, icon: '💉' },
-                {id : 30, image:'assets/pro.png', name: 'probeta graduada', description: '250ml', price: 55.00, icon: '💧'     },
-                {id : 31, image:'assets/pro.png', name: 'probeta graduada', description: '50ml', price: 20.00, icon: '📏'     },
-                {id : 32, image:'assets/pig.png', name: 'pipeta graduada', description: '25ml', price: 17.00, icon: '💉'     },
-                {id : 33,image:'assets/piv.jpg', name: 'pipeta volumetrica', description: '10ml', price: 28.00, icon: '💧'     },
-                {id : 34,image:'assets/buretaA.jpg', name: 'bureta graduada', description: '25ml', price: 100, icon: '📏'     },
-                 {id : 32,image:'assets/pig.png', name: 'pipeta graduada', description: '10ml', price: 13.00, icon: '💉'     },
-                {id : 33,image:'assets/pig.png', name: 'pipeta graduada', description: '5ml', price: 13.00, icon: '💉'     },
-                {id:34,image:'assets/embudo.png',name:'embudo',description   :'75mm',price:16.00,icon:'💧'     }
+<!-- CONTACT -->
+<section class="contact-section" id="contacto">
+  <div class="contact-inner">
+    <div class="contact-info">
+      <h2>Contáctanos</h2>
+      <p>Estamos disponibles para asesorarte en la selección del material adecuado para tu laboratorio. Contamos con envíos a todo el país.</p>
+      <div class="contact-detail">
+        <span class="contact-icon">📍</span>
+        <div class="contact-text">
+          <strong>Dirección</strong>
+          <span>Av. Ciencia 1240, Zona Industrial</span>
+        </div>
+      </div>
+      <div class="contact-detail">
+        <span class="contact-icon">📞</span>
+        <div class="contact-text">
+          <strong>Teléfono</strong>
+          <span>+591 2 234 5678</span>
+        </div>
+      </div>
+      <div class="contact-detail">
+        <span class="contact-icon">✉️</span>
+        <div class="contact-text">
+          <strong>Email</strong>
+          <span>ventas@carlo-lab.com</span>
+        </div>
+      </div>
+      <div class="contact-detail">
+        <span class="contact-icon">🕐</span>
+        <div class="contact-text">
+          <strong>Horario</strong>
+          <span>Lun–Vie: 8:00–18:00 / Sáb: 9:00–13:00</span>
+        </div>
+      </div>
+    </div>
+    <form class="contact-form" onsubmit="sendMessage(event)">
+      <input type="text" placeholder="Tu nombre" class="form-input" required>
+      <input type="email" placeholder="Correo electrónico" class="form-input" required>
+      <input type="text" placeholder="Institución / Empresa" class="form-input">
+      <textarea placeholder="¿En qué podemos ayudarte?" class="form-input form-textarea" required></textarea>
+      <button type="submit" class="btn-primary">Enviar Mensaje →</button>
+    </form>
+  </div>
+</section>
 
+<footer>
+    <button class="admin-btn" onclick="openAdmin()">.</button>
+  © 2025 <span>CARLO</span> — Material de Laboratorio. Todos los derechos reservados.
+</footer>
 
+<!-- CART SIDEBAR -->
+<div class="cart-overlay" id="cartOverlay" onclick="toggleCart()"></div>
+<div class="cart-panel" id="cartPanel">
+  <div class="cart-header">
+    <h3>🛒 Tu Carrito</h3>
+    <button class="close-btn" onclick="toggleCart()">✕</button>
+  </div>
+  <div class="cart-items" id="cartItems"></div>
+  <div class="cart-footer">
+    <div class="cart-total">
+      <span>Total</span>
+      <span id="cartTotal">Bs. 0.00</span>
+    </div>
+    <button class="checkout-btn" onclick="checkout()">Confirmar Pedido ✓</button>
+  </div>
+</div>
 
+<!-- ADMIN MODAL -->
+<div class="modal-overlay" id="adminModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h2>⚙ Panel de Administración</h2>
+      <div style="display:flex;gap:.5rem;align-items:center;">
+        <div class="modal-tabs">
+          <button class="modal-tab active" onclick="switchTab('products')">Productos</button>
+          <button class="modal-tab" onclick="switchTab('add')">+ Agregar</button>
+          <button class="modal-tab" onclick="switchTab('sales')">Ventas</button>
+        </div>
+        <button class="close-btn" onclick="closeAdmin()" style="color:#8ba8d4;font-size:1.4rem;">✕</button>
+      </div>
+    </div>
+    <div class="modal-body">
 
+      <!-- LOGIN -->
+      <div id="tabLogin" class="tab-content active">
+        <div class="login-form">
+          <h3>🔒 Acceso Administrador</h3>
+          <div class="field" style="margin-bottom:.8rem;">
+            <label>Usuario</label>
+            <input type="text" id="loginUser" placeholder="admin">
+          </div>
+          <div class="field" style="margin-bottom:1rem;">
+            <label>Contraseña</label>
+            <input type="password" id="loginPass" placeholder="••••••">
+          </div>
+          <button class="save-btn" onclick="doLogin()" style="width:100%;">Ingresar</button>
+          <p style="font-size:.75rem;color:var(--gray);text-align:center;margin-top:.8rem;">Usuario: admin / Clave: carlo2025</p>
+        </div>
+      </div>
 
-            ],
-            
-        };
+      <!-- PRODUCTS TAB -->
+      <div id="tabProducts" class="tab-content">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;">
+          <strong style="font-size:.9rem;">Gestionar Productos</strong>
+          <button class="save-btn" onclick="switchTab('add')" style="padding:.4rem .9rem;font-size:.78rem;">+ Agregar nuevo</button>
+        </div>
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Img</th><th>Nombre</th><th>Precio</th><th>Stock</th><th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="adminProductsBody"></tbody>
+        </table>
+      </div>
 
-        let cart = [];
+      <!-- ADD/EDIT TAB -->
+      <div id="tabAdd" class="tab-content">
+        <strong id="formTitle" style="font-size:.9rem;display:block;margin-bottom:1.2rem;">Agregar Producto</strong>
+        <div class="admin-form">
+          <div class="field">
+            <label>Nombre del Producto *</label>
+            <input type="text" id="fName" placeholder="Ej: Microscopio Binocular">
+          </div>
+          <div class="field">
+            <label>Precio (Bs.) *</label>
+            <input type="number" id="fPrice" placeholder="0.00" min="0" step="0.01">
+          </div>
+          <div class="field full">
+            <label>Descripción</label>
+            <textarea id="fDesc" placeholder="Descripción del producto..."></textarea>
+          </div>
+          <div class="field">
+            <label>Categoría</label>
+            <select id="fCat">
+              <option>Óptica</option>
+              <option>Cristalería</option>
+              <option>Reactivos</option>
+              <option>Medición</option>
+              <option>Seguridad</option>
+              <option>Equipos</option>
+              <option>Otros</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Estado de Stock</label>
+            <select id="fStock">
+              <option value="true">En Stock</option>
+              <option value="false">Sin Stock</option>
+            </select>
+          </div>
+          <div class="field full">
+            <label>URL de Imagen (opcional)</label>
+            <input type="text" id="fImg" placeholder="https://... o dejar vacío para ícono automático">
+          </div>
+          <div class="field full">
+            <input type="hidden" id="fEditId" value="">
+            <button class="save-btn" onclick="saveProduct()">💾 Guardar Producto</button>
+            <button class="cancel-btn" onclick="cancelEdit()">Cancelar</button>
+          </div>
+        </div>
+      </div>
 
-        function toggleMenu() {
-            const navMenu = document.getElementById('navMenu');
-            navMenu.classList.toggle('active');
-        }
+      <!-- SALES TAB -->
+      <div id="tabSales" class="tab-content">
+        <div class="sales-stats">
+          <div class="stat-card">
+            <div class="stat-value" id="statTotal">Bs. 0</div>
+            <div class="stat-label">Total Vendido</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="statOrders">0</div>
+            <div class="stat-label">Pedidos</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="statItems">0</div>
+            <div class="stat-label">Productos Vendidos</div>
+          </div>
+        </div>
+        <strong style="font-size:.85rem;display:block;margin-bottom:.8rem;color:var(--gray);text-transform:uppercase;letter-spacing:.05em;">Historial de Pedidos</strong>
+        <div id="salesList"></div>
+      </div>
 
-        // Cerrar menú al hacer clic en un enlace
-        document.addEventListener('DOMContentLoaded', function() {
-            const navLinks = document.querySelectorAll('.nav-link');
-            navLinks.forEach(link => {
-                link.addEventListener('click', function() {
-                    const navMenu = document.getElementById('navMenu');
-                    if (window.innerWidth <= 768) {
-                        navMenu.classList.remove('active');
-                    }
-                });
-            });
-        });
+    </div>
+  </div>
+</div>
 
-        function scrollSection(sectionId, direction) {
-            const container = document.getElementById(sectionId);
-            const scrollAmount = 300;
-            
-            if (direction === 'left') {
-                container.scrollBy({
-                    left: -scrollAmount,
-                    behavior: 'smooth'
-                });
-            } else {
-                container.scrollBy({
-                    left: scrollAmount,
-                    behavior: 'smooth'
-                });
-            }
-        }
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
 
-        function renderProducts(category, containerId) {
-            const container = document.getElementById(containerId);
-            products[category].forEach(product => {
-                const card = document.createElement('div');
-                card.className = 'product-card';
-                card.innerHTML = `
-                    ${product.bestseller ? '<div class="bestseller-badge">⭐ MÁS VENDIDO</div>' : ''}
-<div class="product-image-container">
-    <img src="${product.image}" alt="${product.name}" class="product-img-display" width="150px" height="150px">
-</div>                     <div class="product-name">${product.name}</div>
-                    <div class="product-description">${product.description}</div>
-                    <div class="product-price">bs${product.price.toFixed(2)}</div>
-                    <button class="add-btn" onclick="addToCart(${product.id}, '${category}')">
-                        Agregar al Carrito
-                    </button>
-                `;
-                container.appendChild(card);
-            });
-        }
+<script>
+// ─── DATA ───
+let products = [
+  { id:1, name:'Microscopio Binocular DX-20', desc:'Microscopio óptico con oculares WF10x, objetivos 4x–100x, iluminación LED. Ideal para laboratorios educativos y clínicos.', price:2850, cat:'Óptica', stock:true, img:'https://images.unsplash.com/photo-1576086213369-97a306d36557?w=400&q=80', emoji:'🔬' },
+  { id:2, name:'Beakers Set 5 piezas', desc:'Juego de vasos precipitados borosilicato grado 3.3. Capacidades: 50ml, 100ml, 250ml, 500ml y 1000ml.', price:185, cat:'Cristalería', stock:true, img:'https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?w=400&q=80', emoji:'🧪' },
+  { id:3, name:'pH-metro Digital Pro', desc:'Medidor de pH con temperatura integrada. Rango 0-14 pH, precisión ±0.01. Con electrodos reemplazables.', price:620, cat:'Medición', stock:true, img:'https://images.unsplash.com/photo-1603126857599-f6e157fa2fe6?w=400&q=80', emoji:'📊' },
+  { id:4, name:'Pipetas Pasteur x100', desc:'Pipetas de vidrio borosilicato para transferencia de líquidos. Calibradas, estériles. Paquete de 100 unidades.', price:95, cat:'Cristalería', stock:true, img:'', emoji:'🧫' },
+  { id:5, name:'Balanza Analítica 200g', desc:'Precisión 0.0001g, pantalla táctil, función tara automática. Conexión USB para exportar datos.', price:3400, cat:'Medición', stock:false, img:'https://images.unsplash.com/photo-1559757175-0eb30cd8c063?w=400&q=80', emoji:'⚖️' },
+  { id:6, name:'Bata de Laboratorio Talla M', desc:'Bata algodón/poliéster 65/35. Resistente a salpicaduras, botones a presión, talla M. Color blanco.', price:145, cat:'Seguridad', stock:true, img:'', emoji:'🥼' },
+  { id:7, name:'Centrífuga de Mesa 6000rpm', desc:'Centrífuga de 8 posiciones, velocidad ajustable 1000–6000rpm, temporizador digital. Certificada.', price:4200, cat:'Equipos', stock:true, img:'', emoji:'⚙️' },
+  { id:8, name:'Guantes de Nitrilo x100', desc:'Guantes desechables nitrilo azul, libres de látex y polvo. Caja x100 unidades, talla M.', price:75, cat:'Seguridad', stock:true, img:'', emoji:'🧤' },
+];
 
-        function addToCart(productId, category) {
-            const product = products[category].find(p => p.id === productId);
-            const existingItem = cart.find(item => item.id === productId);
-            
-            if (existingItem) {
-                existingItem.quantity++;
-            } else {
-                cart.push({ ...product, quantity: 1 });
-            }
-            
-            updateCartCount();
-            showNotification('✅ Producto agregado al carrito');
-        }
+let cart = [];
+let sales = [];
+let isLoggedIn = false;
+let nextId = 9;
+let editingId = null;
 
-        function updateCartCount() {
-            const count = cart.reduce((sum, item) => sum + item.quantity, 0);
-            document.getElementById('cartCount').textContent = count;
-        }
+// ─── RENDER PRODUCTS ───
+function renderProducts(list) {
+  const grid = document.getElementById('productsGrid');
+  grid.innerHTML = '';
+  if (!list.length) {
+    grid.innerHTML = '<p style="color:var(--gray);grid-column:1/-1;text-align:center;padding:2rem;">No se encontraron productos.</p>';
+    return;
+  }
+  list.forEach(p => {
+    const card = document.createElement('div');
+    card.className = 'product-card';
+    card.innerHTML = `
+      <div class="product-img">
+        ${p.img ? `<img src="${p.img}" alt="${p.name}" onerror="this.style.display='none'">` : p.emoji}
+      </div>
+      <div class="product-info">
+        <span class="stock-badge ${p.stock ? 'in-stock' : 'out-stock'}">${p.stock ? '✓ En Stock' : '✗ Sin Stock'}</span>
+        <div class="product-name">${p.name}</div>
+        <div class="product-desc">${p.desc}</div>
+        <div class="product-footer">
+          <div class="product-price">Bs. ${p.price.toLocaleString('es-BO', {minimumFractionDigits:2})}</div>
+          ${p.stock ? `<button class="add-cart-btn" onclick="addToCart(${p.id})">+ Añadir</button>` : '<span style="font-size:.72rem;color:var(--gray);">No disponible</span>'}
+        </div>
+      </div>`;
+    grid.appendChild(card);
+  });
+}
 
-        function openCart() {
-            const modal = document.getElementById('cartModal');
-            const cartItems = document.getElementById('cartItems');
-            
-            if (cart.length === 0) {
-                cartItems.innerHTML = '<div class="empty-cart">Tu carrito está vacío</div>';
-                document.getElementById('totalPrice').textContent = 'Total: $0.00';
-            } else {
-                cartItems.innerHTML = cart.map((item, index) => `
-                    <div class="cart-item">
-                        <div class="cart-item-info">
-                            <div class="cart-item-name">${item.icon} ${item.name}</div>
-                            <div class="cart-item-price">$${item.price.toFixed(2)} c/u</div>
-                        </div>
-                        <div class="quantity-controls">
-                            <button class="qty-btn" onclick="updateQuantity(${index}, -1)">−</button>
-                            <span style="margin: 0 0.5rem; font-weight: bold;">${item.quantity}</span>
-                            <button class="qty-btn" onclick="updateQuantity(${index}, 1)">+</button>
-                            <button class="remove-btn" onclick="removeItem(${index})">🗑️</button>
-                        </div>
-                    </div>
-                `).join('');
-                
-                const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-                document.getElementById('totalPrice').textContent = `Total: bs{total.toFixed(2)}`;
-            }
-            
-            modal.style.display = 'flex';
-        }
+function filterProducts() {
+  const q = document.getElementById('searchInput').value.toLowerCase();
+  const filtered = products.filter(p =>
+    p.name.toLowerCase().includes(q) || p.desc.toLowerCase().includes(q) || p.cat.toLowerCase().includes(q)
+  );
+  renderProducts(filtered);
+}
 
-        function closeCart() {
-            document.getElementById('cartModal').style.display = 'none';
-        }
+// ─── CART ───
+function addToCart(id) {
+  const p = products.find(x => x.id === id);
+  if (!p || !p.stock) return;
+  const existing = cart.find(x => x.id === id);
+  if (existing) existing.qty++;
+  else cart.push({ ...p, qty: 1 });
+  updateCartUI();
+  showToast(`✓ "${p.name}" añadido al carrito`, 'success');
+}
 
-        function updateQuantity(index, change) {
-            cart[index].quantity += change;
-            if (cart[index].quantity <= 0) {
-                cart.splice(index, 1);
-            }
-            updateCartCount();
-            openCart();
-        }
+function updateCartUI() {
+  const count = cart.reduce((s, x) => s + x.qty, 0);
+  document.getElementById('cartCount').textContent = count;
+  renderCartItems();
+  updateCartTotal();
+}
 
-        function removeItem(index) {
-            cart.splice(index, 1);
-            updateCartCount();
-            openCart();
-        }
+function renderCartItems() {
+  const el = document.getElementById('cartItems');
+  if (!cart.length) {
+    el.innerHTML = '<div class="cart-empty">🛒<br>Tu carrito está vacío</div>';
+    return;
+  }
+  el.innerHTML = cart.map(item => `
+    <div class="cart-item">
+      <div class="cart-item-img">
+        ${item.img ? `<img src="${item.img}" alt="${item.name}" onerror="this.parentElement.innerHTML='${item.emoji}'">` : item.emoji}
+      </div>
+      <div class="cart-item-info">
+        <div class="cart-item-name">${item.name}</div>
+        <div class="cart-item-price">Bs. ${(item.price * item.qty).toLocaleString('es-BO', {minimumFractionDigits:2})}</div>
+        <div class="cart-qty">
+          <button class="qty-btn" onclick="changeQty(${item.id},-1)">−</button>
+          <span class="qty-num">${item.qty}</span>
+          <button class="qty-btn" onclick="changeQty(${item.id},1)">+</button>
+        </div>
+      </div>
+      <button class="remove-item" onclick="removeFromCart(${item.id})">🗑</button>
+    </div>`).join('');
+}
 
-        function sendToWhatsApp() {
-            if (cart.length === 0) {
-                alert('Tu carrito está vacío');
-                return;
-            }
-            
-            let message = '🧪 *PEDIDO VIENTOS DE GLORIA:*%0A%0A';
-            cart.forEach(item => {
-                message += `${item.icon} *${item.name}*%0ACantidad: ${item.quantity}%0APrecio: $${(item.price * item.quantity).toFixed(2)}%0A%0A`;
-            });
-            
-            const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-            message += `💰 *TOTAL: $${total.toFixed(2)}*`;
-            
-            // Reemplaza este número con el número de WhatsApp de tu empresa (formato internacional sin +)
-            const phoneNumber = '59178949069';
-            const whatsappURL = `https://wa.me/${phoneNumber}?text=${message}`;
-            
-            window.open(whatsappURL, '_blank');
-        }
+function changeQty(id, delta) {
+  const item = cart.find(x => x.id === id);
+  if (!item) return;
+  item.qty += delta;
+  if (item.qty <= 0) removeFromCart(id);
+  else updateCartUI();
+}
 
-        function showNotification(message) {
-            const notification = document.createElement('div');
-            notification.style.cssText = `
-                position: fixed;
-                top: 100px;
-                right: 20px;
-                background: linear-gradient(135deg, #2ecc71, #27ae60);
-                color: white;
-                padding: 1rem 1.5rem;
-                border-radius: 12px;
-                box-shadow: 0 4px 15px rgba(46, 204, 113, 0.3);
-                z-index: 3000;
-                animation: slideInRight 0.3s ease;
-            `;
-            notification.textContent = message;
-            document.body.appendChild(notification);
-            
-            setTimeout(() => {
-                notification.style.animation = 'slideOutRight 0.3s ease';
-                setTimeout(() => notification.remove(), 300);
-            }, 2000);
-        }
+function removeFromCart(id) {
+  cart = cart.filter(x => x.id !== id);
+  updateCartUI();
+}
 
-        // Renderizar todos los productos al cargar la página
-        renderProducts('bestsellers', 'bestsellers');
-        renderProducts('tubesFlasks', 'tubesFlasks');
-        renderProducts('measurement', 'measurement');
-        renderProducts('accessories', 'accessories');
+function updateCartTotal() {
+  const total = cart.reduce((s, x) => s + x.price * x.qty, 0);
+  document.getElementById('cartTotal').textContent = 'Bs. ' + total.toLocaleString('es-BO', {minimumFractionDigits:2});
+}
 
-        // Cerrar modal al hacer clic fuera
-        window.onclick = function(event) {
-            const modal = document.getElementById('cartModal');
-            if (event.target === modal) {
-                closeCart();
-            }
-        }
-    </script>
-    <a href="https://wa.me/59178949069?text=Hola%20Vientos%20de%20Gloria,%20necesito%20información%20sobre%20materiales%20de%20laboratorio" 
-   class="whatsapp-float" 
-   target="_blank" 
-   rel="noopener noreferrer">
-    <i class="fa-brands fa-whatsapp"></i>
-    <span class="tooltip-text">¡Escríbenos!</span>
-</a>
+function toggleCart() {
+  const panel = document.getElementById('cartPanel');
+  const overlay = document.getElementById('cartOverlay');
+  panel.classList.toggle('open');
+  overlay.classList.toggle('open');
+}
+
+function checkout() {
+  if (!cart.length) { showToast('El carrito está vacío', 'error'); return; }
+  const total = cart.reduce((s, x) => s + x.price * x.qty, 0);
+  const items = cart.map(x => ({ name: x.name, qty: x.qty, price: x.price }));
+  sales.push({
+    id: sales.length + 1,
+    date: new Date().toLocaleString('es-BO'),
+    items, total
+  });
+  cart = [];
+  updateCartUI();
+  toggleCart();
+  showToast('✓ ¡Pedido confirmado! Nos pondremos en contacto.', 'success');
+}
+
+// ─── ADMIN ───
+function openAdmin() {
+  document.getElementById('adminModal').classList.add('open');
+  if (isLoggedIn) { showAdminTabs(); switchTab('products'); }
+  else { showLoginOnly(); }
+}
+
+function closeAdmin() {
+  document.getElementById('adminModal').classList.remove('open');
+}
+
+function showLoginOnly() {
+  document.querySelector('.modal-tabs').style.display = 'none';
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.getElementById('tabLogin').classList.add('active');
+}
+
+function showAdminTabs() {
+  document.querySelector('.modal-tabs').style.display = 'flex';
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.getElementById('tabProducts').classList.add('active');
+}
+
+function doLogin() {
+  const u = document.getElementById('loginUser').value;
+  const p = document.getElementById('loginPass').value;
+  if (u === 'admin' && p === 'carlo2025') {
+    isLoggedIn = true;
+    showAdminTabs();
+    switchTab('products');
+    showToast('✓ Bienvenido, Administrador', 'success');
+  } else {
+    showToast('Usuario o contraseña incorrectos', 'error');
+  }
+}
+
+function switchTab(tab) {
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.modal-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('tab' + tab.charAt(0).toUpperCase() + tab.slice(1)).classList.add('active');
+  event && event.target && event.target.classList.add('active');
+  if (tab === 'products') renderAdminProducts();
+  if (tab === 'sales') renderSales();
+  if (tab === 'add' && !editingId) cancelEdit();
+}
+
+function renderAdminProducts() {
+  const tbody = document.getElementById('adminProductsBody');
+  tbody.innerHTML = products.map(p => `
+    <tr>
+      <td>${p.img ? `<img src="${p.img}" alt="${p.name}" onerror="this.style.display='none'">` : `<div class="no-img">${p.emoji}</div>`}</td>
+      <td><strong>${p.name}</strong><br><span style="color:var(--gray);font-size:.72rem;">${p.cat}</span></td>
+      <td><strong>Bs. ${p.price.toLocaleString('es-BO',{minimumFractionDigits:2})}</strong></td>
+      <td><span class="stock-badge ${p.stock ? 'in-stock' : 'out-stock'}" style="font-size:.7rem;">${p.stock ? 'En Stock' : 'Sin Stock'}</span></td>
+      <td>
+        <button class="edit-btn" onclick="editProduct(${p.id})">✏ Editar</button>
+        <button class="del-btn" onclick="deleteProduct(${p.id})">🗑 Eliminar</button>
+      </td>
+    </tr>`).join('');
+}
+
+function editProduct(id) {
+  const p = products.find(x => x.id === id);
+  if (!p) return;
+  editingId = id;
+  document.getElementById('formTitle').textContent = '✏ Editar Producto';
+  document.getElementById('fEditId').value = id;
+  document.getElementById('fName').value = p.name;
+  document.getElementById('fPrice').value = p.price;
+  document.getElementById('fDesc').value = p.desc;
+  document.getElementById('fCat').value = p.cat;
+  document.getElementById('fStock').value = p.stock.toString();
+  document.getElementById('fImg').value = p.img || '';
+  // manually set active tab
+  document.querySelectorAll('.modal-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.modal-tab')[1].classList.add('active');
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.getElementById('tabAdd').classList.add('active');
+}
+
+function deleteProduct(id) {
+  if (!confirm('¿Eliminar este producto?')) return;
+  products = products.filter(x => x.id !== id);
+  cart = cart.filter(x => x.id !== id);
+  renderAdminProducts();
+  renderProducts(products);
+  updateCartUI();
+  showToast('Producto eliminado', 'success');
+}
+
+function saveProduct() {
+  const name = document.getElementById('fName').value.trim();
+  const price = parseFloat(document.getElementById('fPrice').value);
+  const desc = document.getElementById('fDesc').value.trim();
+  const cat = document.getElementById('fCat').value;
+  const stock = document.getElementById('fStock').value === 'true';
+  const img = document.getElementById('fImg').value.trim();
+
+  if (!name || isNaN(price) || price < 0) {
+    showToast('Por favor completa nombre y precio válido', 'error'); return;
+  }
+
+  const catEmojis = { Óptica:'🔬', Cristalería:'🧪', Reactivos:'⚗️', Medición:'📊', Seguridad:'🥼', Equipos:'⚙️', Otros:'📦' };
+
+  if (editingId) {
+    const p = products.find(x => x.id === editingId);
+    Object.assign(p, { name, price, desc, cat, stock, img, emoji: catEmojis[cat] || '📦' });
+    // Update cart if exists
+    const ci = cart.find(x => x.id === editingId);
+    if (ci) Object.assign(ci, { name, price, desc, img, emoji: catEmojis[cat] || '📦' });
+    showToast('✓ Producto actualizado', 'success');
+    editingId = null;
+  } else {
+    products.push({ id: nextId++, name, price, desc, cat, stock, img, emoji: catEmojis[cat] || '📦' });
+    showToast('✓ Producto agregado', 'success');
+  }
+  renderProducts(products);
+  updateCartUI();
+  cancelEdit();
+  // manually switch to products tab
+  document.querySelectorAll('.modal-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.modal-tab')[0].classList.add('active');
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.getElementById('tabProducts').classList.add('active');
+  renderAdminProducts();
+}
+
+function cancelEdit() {
+  editingId = null;
+  document.getElementById('formTitle').textContent = 'Agregar Producto';
+  document.getElementById('fEditId').value = '';
+  document.getElementById('fName').value = '';
+  document.getElementById('fPrice').value = '';
+  document.getElementById('fDesc').value = '';
+  document.getElementById('fCat').value = 'Óptica';
+  document.getElementById('fStock').value = 'true';
+  document.getElementById('fImg').value = '';
+}
+
+function renderSales() {
+  const total = sales.reduce((s, x) => s + x.total, 0);
+  const items = sales.reduce((s, x) => s + x.items.reduce((a, i) => a + i.qty, 0), 0);
+  document.getElementById('statTotal').textContent = 'Bs. ' + total.toLocaleString('es-BO',{minimumFractionDigits:2});
+  document.getElementById('statOrders').textContent = sales.length;
+  document.getElementById('statItems').textContent = items;
+
+  const el = document.getElementById('salesList');
+  if (!sales.length) {
+    el.innerHTML = '<p style="color:var(--gray);font-size:.85rem;text-align:center;padding:1.5rem;">Aún no hay pedidos registrados.</p>';
+    return;
+  }
+  el.innerHTML = [...sales].reverse().map(s => `
+    <div class="sale-row">
+      <div>
+        <div style="font-weight:700;font-size:.8rem;">#${String(s.id).padStart(3,'0')}</div>
+        <div class="sale-date">${s.date}</div>
+      </div>
+      <div class="sale-items">${s.items.map(i => `${i.name} ×${i.qty}`).join(', ')}</div>
+      <div class="sale-total">Bs. ${s.total.toLocaleString('es-BO',{minimumFractionDigits:2})}</div>
+      <div><span class="sale-status">Confirmado</span></div>
+    </div>`).join('');
+}
+
+// ─── TOAST ───
+function showToast(msg, type='success') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = `toast ${type} show`;
+  setTimeout(() => t.classList.remove('show'), 3200);
+}
+
+// ─── CONTACT FORM ───
+function sendMessage(e) {
+  e.preventDefault();
+  showToast('✓ Mensaje enviado. Nos comunicaremos pronto.', 'success');
+  e.target.reset();
+}
+
+// ─── INIT ───
+renderProducts(products);
+updateCartUI();
+
+// Close admin on overlay click
+document.getElementById('adminModal').addEventListener('click', function(e) {
+  if (e.target === this) closeAdmin();
+});
+</script>
 </body>
 </html>
