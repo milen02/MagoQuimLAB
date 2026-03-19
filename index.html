@@ -766,16 +766,99 @@
 
 <script>
 // ─── DATA ───
-let products = [
-  { id:1, name:'Microscopio Binocular DX-20', desc:'Microscopio óptico con oculares WF10x, objetivos 4x–100x, iluminación LED. Ideal para laboratorios educativos y clínicos.', price:2850, cat:'Óptica', stock:true, img:'https://images.unsplash.com/photo-1576086213369-97a306d36557?w=400&q=80', emoji:'🔬' },
-  { id:2, name:'Beakers Set 5 piezas', desc:'Juego de vasos precipitados borosilicato grado 3.3. Capacidades: 50ml, 100ml, 250ml, 500ml y 1000ml.', price:185, cat:'Cristalería', stock:true, img:'https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?w=400&q=80', emoji:'🧪' },
-  { id:3, name:'pH-metro Digital Pro', desc:'Medidor de pH con temperatura integrada. Rango 0-14 pH, precisión ±0.01. Con electrodos reemplazables.', price:620, cat:'Medición', stock:true, img:'https://images.unsplash.com/photo-1603126857599-f6e157fa2fe6?w=400&q=80', emoji:'📊' },
-  { id:4, name:'Pipetas Pasteur x100', desc:'Pipetas de vidrio borosilicato para transferencia de líquidos. Calibradas, estériles. Paquete de 100 unidades.', price:95, cat:'Cristalería', stock:true, img:'', emoji:'🧫' },
-  { id:5, name:'Balanza Analítica 200g', desc:'Precisión 0.0001g, pantalla táctil, función tara automática. Conexión USB para exportar datos.', price:3400, cat:'Medición', stock:false, img:'https://images.unsplash.com/photo-1559757175-0eb30cd8c063?w=400&q=80', emoji:'⚖️' },
-  { id:6, name:'Bata de Laboratorio Talla M', desc:'Bata algodón/poliéster 65/35. Resistente a salpicaduras, botones a presión, talla M. Color blanco.', price:145, cat:'Seguridad', stock:true, img:'', emoji:'🥼' },
-  { id:7, name:'Centrífuga de Mesa 6000rpm', desc:'Centrífuga de 8 posiciones, velocidad ajustable 1000–6000rpm, temporizador digital. Certificada.', price:4200, cat:'Equipos', stock:true, img:'', emoji:'⚙️' },
-  { id:8, name:'Guantes de Nitrilo x100', desc:'Guantes desechables nitrilo azul, libres de látex y polvo. Caja x100 unidades, talla M.', price:75, cat:'Seguridad', stock:true, img:'', emoji:'🧤' },
-];
+let products = [];
+// ─── CONFIGURACIÓN ───
+const sheet_url = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSw6BFJULaFQiAGoNeXYtuBI5hdovyPPdUfUNL93RVnKmIkxHAQeGlDXr4JvaCXuc4rxVl0FbbNlD6a/pub?gid=1904782916&single=true&output=csv';
+
+// ─── CARGAR PRODUCTOS DESDE GOOGLE SHEETS ───
+async function loadProductsFromSheet() {
+    try {
+        const response = await fetch(sheet_url);
+        const csvText = await response.text();
+
+        const rows = csvText.split('\n').slice(1); // Saltar fila de encabezados
+
+        let currentName = '';
+        let currentItem = '';
+        let newId = 1;
+        const result = [];
+
+        // Emojis y categorías automáticas
+        function getCategory(name) {
+            const n = name.toUpperCase();
+            if (['PORTA', 'CUBRE'].some(x => n.includes(x))) return 'Microscopía';
+            if (['EQUIPO', 'SOXHLET', 'FILTRACION', 'DESTILACION'].some(x => n.includes(x))) return 'Equipos';
+            if (['PIPETA', 'BURETA', 'PROBETA', 'MATRAZ AFORADO'].some(x => n.includes(x))) return 'Medición';
+            return 'Cristalería';
+        }
+
+        function getEmoji(cat) {
+            const map = {
+                'Cristalería': '🧪',
+                'Medición': '📏',
+                'Equipos': '⚗️',
+                'Microscopía': '🔬',
+            };
+            return map[cat] || '📦';
+        }
+
+        rows.forEach(row => {
+            // Separar columnas respetando comas dentro de comillas
+            const cols = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
+            if (cols.length < 4) return;
+
+            const num    = cols[0]?.replace(/"/g, '').trim();
+            const item   = cols[1]?.replace(/"/g, '').trim();
+            const desc   = cols[2]?.replace(/"/g, '').trim();
+            const size   = cols[3]?.replace(/"/g, '').trim();
+           // const price  = parseFloat(cols[5]?.replace(/"/g, '').trim());
+
+            // Si hay descripción en esta fila, actualizamos el producto actual
+            if (desc) {
+                currentName = desc.replace(/\n/g, ' ').trim();
+                if (item) currentItem = item;
+            }
+
+            // Solo agregamos si hay nombre, tamaño y precio válido
+            if (currentName && size && !isNaN(price) && price > 0) {
+                const cat   = getCategory(currentName);
+                const emoji = getEmoji(cat);
+                const fullName = `${currentName} ${size}`;
+
+                result.push({
+                    id:    newId++,
+                    name:  fullName,
+                    desc:  `Ítem ${currentItem} · ${size}`,
+                 //   price: price,
+                    cat:   cat,
+                    stock: true,
+                    img:   '',       // Sin imagen por ahora
+                    emoji: emoji
+                });
+            }
+        });
+
+        products = result;
+
+        if (products.length > 0) {
+            nextId = Math.max(...products.map(p => p.id)) + 1;
+        }
+
+        renderProducts(products);
+        updateCartUI();
+
+    } catch (error) {
+        console.error("Error al cargar productos:", error);
+        showToast('Error al conectar con el inventario', 'error');
+    }
+}
+
+// ─── INIT ───
+document.addEventListener('DOMContentLoaded', () => {
+    loadProductsFromSheet();
+});
+
+
 
 let cart = [];
 let sales = [];
@@ -783,34 +866,38 @@ let isLoggedIn = false;
 let nextId = 9;
 let editingId = null;
 
+
+
 // ─── RENDER PRODUCTS ───
 function renderProducts(list) {
   const grid = document.getElementById('productsGrid');
   grid.innerHTML = '';
-  if (!list.length) {
-    grid.innerHTML = '<p style="color:var(--gray);grid-column:1/-1;text-align:center;padding:2rem;">No se encontraron productos.</p>';
-    return;
-  }
+  
   list.forEach(p => {
     const card = document.createElement('div');
     card.className = 'product-card';
+    
+    // Si hay URL en 'img', la ponemos. Si no, ponemos el 'emoji'.
+    const mediaHTML = p.img && p.img.length > 5 
+        ? `<img src="${p.img}" alt="${p.name}" onerror="this.parentElement.innerHTML='${p.emoji}'">` 
+        : `<span>${p.emoji}</span>`;
+
     card.innerHTML = `
       <div class="product-img">
-        ${p.img ? `<img src="${p.img}" alt="${p.name}" onerror="this.style.display='none'">` : p.emoji}
+        ${mediaHTML}
       </div>
       <div class="product-info">
         <span class="stock-badge ${p.stock ? 'in-stock' : 'out-stock'}">${p.stock ? '✓ En Stock' : '✗ Sin Stock'}</span>
         <div class="product-name">${p.name}</div>
         <div class="product-desc">${p.desc}</div>
         <div class="product-footer">
-          <div class="product-price">Bs. ${p.price.toLocaleString('es-BO', {minimumFractionDigits:2})}</div>
-          ${p.stock ? `<button class="add-cart-btn" onclick="addToCart(${p.id})">+ Añadir</button>` : '<span style="font-size:.72rem;color:var(--gray);">No disponible</span>'}
+          <div class="product-price">Consultar precio</div>
+           ${p.stock ? `<button class="add-cart-btn" onclick="addToCart(${p.id})">+ Añadir</button>` : '<span style="font-size:.72rem;color:var(--gray);">No disponible</span>'}
         </div>
       </div>`;
     grid.appendChild(card);
   });
 }
-
 function filterProducts() {
   const q = document.getElementById('searchInput').value.toLowerCase();
   const filtered = products.filter(p =>
@@ -850,8 +937,8 @@ function renderCartItems() {
       </div>
       <div class="cart-item-info">
         <div class="cart-item-name">${item.name}</div>
-        <div class="cart-item-price">Bs. ${(item.price * item.qty).toLocaleString('es-BO', {minimumFractionDigits:2})}</div>
-        <div class="cart-qty">
+        <div class="cart-item-price">Precio a confirmar</div>
+         <div class="cart-qty">
           <button class="qty-btn" onclick="changeQty(${item.id},-1)">−</button>
           <span class="qty-num">${item.qty}</span>
           <button class="qty-btn" onclick="changeQty(${item.id},1)">+</button>
@@ -875,8 +962,7 @@ function removeFromCart(id) {
 }
 
 function updateCartTotal() {
-  const total = cart.reduce((s, x) => s + x.price * x.qty, 0);
-  document.getElementById('cartTotal').textContent = 'Bs. ' + total.toLocaleString('es-BO', {minimumFractionDigits:2});
+  document.getElementById('cartTotal').textContent = 'A confirmar por WhatsApp';
 }
 
 function toggleCart() {
@@ -895,12 +981,9 @@ function checkout() {
   // 1. Construir el mensaje de pedido
   let mensaje = "Hola Magoquim LAB, me interesa cotizar los siguientes productos:%0A%0A";
   cart.forEach(item => {
-    mensaje += `• *${item.name}* (x${item.qty}) - Bs. ${(item.price * item.qty).toFixed(2)}%0A`;
+    mensaje += `• *${item.name}* (x${item.qty}) - Bs. a confirmar%0A`;
   });
   
-  const total = cart.reduce((s, x) => s + x.price * x.qty, 0);
-  mensaje += `%0A*Total del pedido: Bs. ${total.toLocaleString('es-BO', {minimumFractionDigits:2})}*`;
-  mensaje += `%0A%0APor favor, me gustaría coordinar la entrega.`;
 
   // 2. Abrir WhatsApp (Sin espacios ni símbolos extra en el número)
   const telefono = "59172578878"; 
@@ -1077,7 +1160,6 @@ function renderSales() {
       <div><span class="sale-status">Confirmado</span></div>
     </div>`).join('');
 }
-
 // ─── TOAST ───
 function showToast(msg, type='success') {
   const t = document.getElementById('toast');
@@ -1085,20 +1167,52 @@ function showToast(msg, type='success') {
   t.className = `toast ${type} show`;
   setTimeout(() => t.classList.remove('show'), 3200);
 }
-
-
 function sendMessage(e) {
   e.preventDefault();
   showToast('✓ Mensaje enviado. Nos comunicaremos pronto.', 'success');
   e.target.reset();
 
 }
-
 // ─── INIT ───
-// ─── INIT ───
-renderProducts(products);
-updateCartUI();
+document.addEventListener('DOMContentLoaded', () => {
+    // Usamos la URL que ya tiene el enlace de Google
+    loadProductsFromSheet(sheet_url); 
+});
 
+// Ajusta la función para que acepte la URL o usa la correcta
+async function loadProductsFromSheet() {
+    try {
+        // CAMBIO: Usar sheet_url (la que tiene el link) en vez de SHEET_URL
+        const response = await fetch(sheet_url); 
+        const csvText = await response.text();
+        
+        const rows = csvText.split('\n').slice(1); 
+        products = rows.map(row => {
+            const cols = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
+            if (cols.length < 5) return null;
+
+            return {
+                id: parseInt(cols[0]),
+                name: cols[1]?.replace(/"/g, '').trim(),
+                desc: cols[2]?.replace(/"/g, '').trim(),
+                price: parseFloat(cols[3]) || 0,
+                cat: cols[4]?.replace(/"/g, '').trim(),
+                stock: cols[5]?.trim().toUpperCase() === 'TRUE',
+                img: cols[6]?.replace(/"/g, '').trim(), 
+                emoji: cols[7]?.replace(/"/g, '').trim() || '📦'
+            };
+        }).filter(p => p !== null);
+        // Añadir esto justo antes de renderProducts(products)
+if (products.length > 0) {
+    nextId = Math.max(...products.map(p => p.id)) + 1;
+}
+        renderProducts(products); 
+        updateCartUI();
+    } catch (error) {
+        console.error("Error al cargar:", error);
+        showToast('Error al conectar con el inventario', 'error');
+    }
+}
 // Close admin on overlay click
 document.getElementById('adminModal').addEventListener('click', function(e) {
   if (e.target === this) closeAdmin();
