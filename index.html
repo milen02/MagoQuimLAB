@@ -188,10 +188,118 @@
   </div>
   <div id="productsContainer"></div>
 </section>
+<footer style="
+  background: #0f1923;
+  color: #c8d8e8;
+  font-family: 'Courier New', monospace;
+  border-top: 2px solid #1e7fcb;
+  padding: 0;
+  position: relative;
+">
 
-<footer>
-  <button class="admin-btn" onclick="openAdmin()">-</button>
-  © 2025 <span>Magoquim LAB</span> — Material de Laboratorio. Todos los derechos reservados.
+  <!-- Franja de contacto -->
+  <div style="
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 2rem;
+    padding: 2.5rem 3rem 2rem;
+    border-bottom: 1px solid rgba(30,127,203,0.25);
+  ">
+
+    <!-- Columna: Empresa -->
+    <div>
+      <p style="
+        font-size: 0.65rem;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: #1e7fcb;
+        margin: 0 0 0.6rem;
+      ">Laboratorio</p>
+      <p style="font-size: 1.1rem; font-weight: bold; color: #e8f4ff; margin: 0 0 0.3rem;">Magoquim LAB</p>
+      <p style="font-size: 0.8rem; color: #7a9ab8; margin: 0;">Material de Laboratorio</p>
+    </div>
+
+    <!-- Columna: Dirección -->
+    <div>
+      <p style="
+        font-size: 0.65rem;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: #1e7fcb;
+        margin: 0 0 0.6rem;
+      ">Dirección</p>
+      <p style="font-size: 0.85rem; margin: 0 0 0.2rem;">Calle 4 </p>
+      <p style="font-size: 0.85rem; margin: 0 0 0.2rem;">La Paz, Bolivia</p>
+
+     
+    </div>
+
+    <!-- Columna: Contacto -->
+    <div>
+      <p style="
+        font-size: 0.65rem;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: #1e7fcb;
+        margin: 0 0 0.6rem;
+      ">Contacto</p>
+      <p style="font-size: 0.85rem; margin: 0 0 0.4rem;">
+        📞 <a href="tel:+591 72578878" style="color: #c8d8e8; text-decoration: none;">+591 72578878</a>
+      </p>
+      <p style="font-size: 0.85rem; margin: 0 0 0.4rem;">
+        📱 <a href="tel:+591 7257887" style="color: #c8d8e8; text-decoration: none;">+591 72578878</a>
+      </p>
+      <p style="font-size: 0.85rem; margin: 0;">
+        ✉️ <a href="mailto:magoquimlab@gmail.com" style="color: #1e7fcb; text-decoration: none;">magoquimlab@gmail.com</a>
+      </p>
+    </div>
+
+    <!-- Columna: Horario -->
+   
+   <!-- Horario -->
+      <div style="min-width: 160px;">
+        <p style="font-size:0.65rem;letter-spacing:0.2em;text-transform:uppercase;color:#1e7fcb;margin:0 0 0.6rem;">Horario</p>
+        <p style="font-size:0.85rem;margin:0 0 0.3rem;">Lun – Vie: 10:00 am – 20:00 pm</p>
+        <p style="font-size:0.85rem;margin:0 0 0.3rem;">Sábado: cerrado</p>
+        <p style="font-size:0.85rem;color:#7a9ab8;margin:0;">Domingo: Cerrado</p>
+      </div>
+ 
+    </div>
+
+  <!-- Barra inferior: copyright + admin -->
+  <div style="
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 3rem;
+    font-size: 0.78rem;
+    color: #7a9ab8;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  ">
+    <span>© 2025 <strong style="color: #c8d8e8;">Magoquim LAB</strong> — Todos los derechos reservados.</span>
+
+    <button
+      class="admin-btn"
+      onclick="openAdmin()"
+      style="
+        background: transparent;
+        border: 1px solid rgba(30,127,203,0.35);
+        color: #7a9ab8;
+        font-family: 'Courier New', monospace;
+        font-size: 0.7rem;
+        padding: 0.2rem 0.6rem;
+        cursor: pointer;
+        border-radius: 3px;
+        transition: all 0.2s;
+        letter-spacing: 0.05em;
+      "
+      onmouseover="this.style.background='rgba(30,127,203,0.35)'; this.style.color='#c8d8e8';"
+      onmouseout="this.style.background='transparent'; this.style.color='#7a9ab8';"
+    >
+  </div>
+
 </footer>
 
 <!-- CART SIDEBAR -->
@@ -513,7 +621,7 @@ function checkout() {
   if(!cart.length){showToast('El carrito está vacío','error');return;}
   let msg="Hola Magoquim LAB, me interesa cotizar los siguientes productos:%0A%0A";
   cart.forEach(i=>{msg+=`• *${i.name}* (x${i.qty}) - Bs. a confirmar%0A`;});
-  window.open(`https://wa.me/59172578878?text=${msg}`,'_blank');
+  window.open(`https://wa.me/59172578878 ese contacto le puedes poner?text=${msg}`,'_blank');
   cart=[]; updateCartUI(); toggleCart(); showToast('✓ Redirigiendo a WhatsApp...','success');
 }
 
